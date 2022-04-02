@@ -14,8 +14,7 @@ export const useWeb3 = () => {
 	} = useContext(AppContext)
 
 	const [incorrectChainId, setIncorrectChainId] = useState(false)
-	const [chainId, setChainId] =
-		useState<typeof ContractInstance.chainId>(80001)
+	const [chainId, setChainId] = useState<typeof ContractInstance.chainId>()
 
 	const getProvider = async (
 		_throwErr: boolean = false
@@ -42,7 +41,7 @@ export const useWeb3 = () => {
 			)
 
 			const { chainId } = await ContractInstance.provider.getNetwork()
-
+			localStorage.setItem('wallet', 'metamask')
 			if (Object.keys(networks).includes(chainId.toString())) {
 				ContractInstance.chainId = chainId as keyof typeof networks
 
@@ -59,13 +58,19 @@ export const useWeb3 = () => {
 	}
 
 	const initialConnection = async () => {
-		const ethereum = (window as any)?.ethereum
-		if (ethereum) {
-			const provider = new ethers.providers.Web3Provider(ethereum)
-			const accounts = await provider.listAccounts()
-			if (accounts.length > 0) {
-				connect()
+		const wallet = localStorage.getItem('wallet')
+		if (wallet === 'metamask') {
+			const ethereum = (window as any)?.ethereum
+			if (ethereum) {
+				const provider = new ethers.providers.Web3Provider(ethereum)
+				const accounts = await provider.listAccounts()
+				if (accounts.length > 0) {
+					connect()
+				}
 			}
+		} else if (wallet === 'torus') {
+		} else {
+			localStorage.clear()
 		}
 	}
 
