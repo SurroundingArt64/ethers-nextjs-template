@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"generate": "typechain --target ethers-v5 --out-dir types .\\contracts\\**.json",
+		"prepare": "typechain --target ethers-v5 --out-dir types .\\contracts\\**.json",
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
